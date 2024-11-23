@@ -34,6 +34,9 @@ linux_hash := 3991a9e16a187d78d5f414d89236ae5d7f404a69e60c4c42a9d262ee19612ef4
 else ifeq "$(CONFIG_LINUX_VERSION)" "5.10.225"
 linux_version := 5.10.225
 linux_hash := 85d7bf3a807538b9032e3f798ab978da9b77352bcb526534038c351a4f39e01c
+else ifeq "$(CONFIG_LINUX_VERSION)" "5.10.214"
+linux_version := 5.10.214
+linux_hash := 40f014d53e81f204f6d2a364aae4201ae07970dd1b70dc602d7c66c1a140f558
 else ifeq "$(CONFIG_LINUX_VERSION)" "6.1.8"
 linux_version := 6.1.8
 linux_hash := b60bb53ab8ba370a270454b11e93d41af29126fc72bd6ede517673e2e57b816d
@@ -86,6 +89,8 @@ $(INSTALL)/include/linux/limits.h: $(build)/$(linux_base_dir)/.canary
 		KCONFIG_CONFIG="$(pwd)/$(linux_kconfig)" \
 		headers_install
 
+# Inconditional: add USB keyboard support to all boards (linux_modules-y)
+linux_modules-y	+= drivers/hid/usbhid/usbhid.ko
 
 # qemu
 linux_modules-$(CONFIG_LINUX_E1000)	+= drivers/net/ethernet/intel/e1000/e1000.ko
@@ -129,9 +134,6 @@ linux_modules-$(CONFIG_LINUX_USB)	+= drivers/usb/host/xhci-hcd.ko
 linux_modules-$(CONFIG_LINUX_USB)	+= drivers/usb/host/xhci-pci.ko
 linux_modules-$(CONFIG_LINUX_USB)	+= drivers/usb/storage/usb-storage.ko
 
-#USB modules when a USB keyboard is defined in board config
-linux_modules-$(CONFIG_SUPPORT_USB_KEYBOARD)	+= drivers/hid/usbhid/usbhid.ko
-
 #USB modules for Mobile USB Tethering (Most Android phones, Librem phone, etc)
 linux_modules-$(CONFIG_MOBILE_TETHERING)	+= drivers/net/mii.ko
 linux_modules-$(CONFIG_MOBILE_TETHERING)	+= drivers/net/usb/usbnet.ko
@@ -167,7 +169,7 @@ linux_target := \
 	$(MAKE_JOBS) \
 
 # We cross compile linux now
-linux_depends := musl-cross
+linux_depends := musl-cross-make
 
 #
 # Linux kernel module installation
@@ -286,6 +288,8 @@ linux.save_in_versioned_defconfig_format:
 		savedefconfig \
 	&& mv "$(build)/$(linux_dir)/defconfig" "$(pwd)/$(linux_kconfig)_defconfig_$(CONFIG_LINUX_VERSION)"
 
+# This one can be used in kernel version bump, which will accept all new defconfig options for the new version.
+#  PLEASE VERIFY CHANGES AND KEEP THINGS MINIMAL IN PRs.
 linux.save_in_oldconfig_format_in_place:
 	mkdir -p "$(build)/$(linux_dir)" \
 	&& cp "$(pwd)/$(linux_kconfig)" "$(build)/$(linux_dir)/.config" \
@@ -293,7 +297,7 @@ linux.save_in_oldconfig_format_in_place:
 		O="$(build)/$(linux_dir)" \
 		ARCH="$(LINUX_ARCH)" \
 		CROSS_COMPILE="$(CROSS)" \
-		oldconfig \
+		olddefconfig \
 	&& mv "$(build)/$(linux_dir)/.config" "$(pwd)/$(linux_kconfig)"
 
 linux.save_in_versioned_oldconfig:
@@ -303,7 +307,7 @@ linux.save_in_versioned_oldconfig:
 		O="$(build)/$(linux_dir)" \
 		ARCH="$(LINUX_ARCH)" \
 		CROSS_COMPILE="$(CROSS)" \
-		oldefconfig \
+		oldconfig \
 	&& mv "$(build)/$(linux_dir)/.config" "$(pwd)/$(linux_kconfig)_oldconfig_$(CONFIG_LINUX_VERSION)"
 
 # Prior of attempting to bump kernel version, call make BOARD=xyz linux.save_in_oldconfig_format_in_place
@@ -317,5 +321,6 @@ linux.prompt_for_new_config_options_for_kernel_version_bump:
 	&& $(MAKE) -C "$(build)/$(linux_base_dir)" \
 		O="$(build)/$(linux_dir)" \
 		ARCH="$(LINUX_ARCH)" \
+		CROSS_COMPILE="$(CROSS)" \
 		oldconfig \
 	&& mv "$(build)/$(linux_dir)/.config" "$(pwd)/$(linux_kconfig)"

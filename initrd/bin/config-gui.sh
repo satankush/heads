@@ -71,12 +71,10 @@ while true; do
     )
 
     # Boards with built-in keyboards can support optional USB keyboards as well.
-    # Export CONFIG_SUPPORT_USB_KEYBOARD=y to enable optional support.
-    # Boards that do not have a built-in keyboard export
+    # Boards that do not have a built-in keyboard/internal keyboard is USB connected export
     # CONFIG_USB_KEYBOARD_REQUIRED=y; this hides the config option and ensures
     # USB keyboard support always loads.
-    [ "$CONFIG_SUPPORT_USB_KEYBOARD" = y ] && [ "$CONFIG_USB_KEYBOARD_REQUIRED" != y ] \
-        && dynamic_config_options+=(
+    [ "$CONFIG_USB_KEYBOARD_REQUIRED" != y ] && dynamic_config_options+=(
             'K' " $(get_config_display_action "$CONFIG_USER_USB_KEYBOARD") USB keyboard"
         )
 
@@ -182,19 +180,21 @@ while true; do
                   \n\nDo you want to proceed?" 0 80) then
         read_rom /tmp/config-gui.rom
         # clear local keyring
-        rm /.gnupg/* | true
+        rm -rf /.gnupg/* || true
+
         # clear /boot signatures/checksums
+        detect_boot_device
         mount -o remount,rw /boot
-        rm /boot/kexec* | true
+        rm -f /boot/kexec* || true
         mount -o remount,ro /boot
+        
         # clear GPG keys and user settings
         for i in `cbfs.sh -o /tmp/config-gui.rom -l | grep -e "heads/"`; do
           cbfs.sh -o /tmp/config-gui.rom -d $i
         done
         # flash cleared ROM
-
-
         /bin/flash.sh -c /tmp/config-gui.rom
+        
         # reset TPM if present
         if [ "$CONFIG_TPM" = "y" ]; then
           /bin/tpm-reset
