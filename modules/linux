@@ -19,10 +19,10 @@ linux_hash := 9c4ebf21fe949f80fbcfbbd6e7fe181040d325e89475e230ab53ef01f9d55605
 else ifeq "$(CONFIG_LINUX_VERSION)" "5.4.69"
 linux_version := 5.4.69
 linux_hash := a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7
-else ifeq "$(CONFIG_LINUX_VERSION)" "5.5-openpower"
-linux_version := 5.5
-linux_patch_version := 5.5-openpower
-linux_hash := a6fbd4ee903c128367892c2393ee0d9657b6ed3ea90016d4dc6f1f6da20b2330
+else ifeq "$(CONFIG_LINUX_VERSION)" "6.6.16-openpower"
+linux_version := 6.6.16
+linux_patch_version := 6.6.16-openpower
+linux_hash := b21d5795a3bead4f112916423222faa8a0f519e4201df343e3eb88dc9e4aaa30
 #
 # linuxboot systems should *NOT* use 5.10.5 until a proper review has
 # been done. This is because `0000-efi_bds.patch` did not cleanly port
@@ -40,9 +40,9 @@ linux_hash := 40f014d53e81f204f6d2a364aae4201ae07970dd1b70dc602d7c66c1a140f558
 else ifeq "$(CONFIG_LINUX_VERSION)" "6.1.8"
 linux_version := 6.1.8
 linux_hash := b60bb53ab8ba370a270454b11e93d41af29126fc72bd6ede517673e2e57b816d
-else ifeq "$(CONFIG_LINUX_VERSION)" "6.1.119"
-linux_version := 6.1.119
-linux_hash := aecdaf39d0a844a81ce4c67d9daff8979e938bb690df4f679fbbb494fe423278
+else ifeq "$(CONFIG_LINUX_VERSION)" "6.1.120"
+linux_version := 6.1.120
+linux_hash := 61c997b8acbbb8ab184565e96f476ecbb7e773cb35b98a1a4c832d809b2bf719
 
 else
 $(error "$(BOARD): does not specify linux kernel version under CONFIG_LINUX_VERSION")
