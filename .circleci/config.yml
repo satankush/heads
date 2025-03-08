@@ -250,11 +250,11 @@ workflows:
       # No need to wait further for other board's cache
       # We reuse built modules from x230-hotp-maximized cache only
       - build_and_persist:
-          name: novacustom_nv4x_adl
-          target: novacustom_nv4x_adl
+          name: novacustom-nv4x_adl
+          target: novacustom-nv4x_adl
           subcommand: ""
           requires:
-            - x86-musl-cross-make
+            - x230-hotp-maximized
 
       # coreboot talos_2
       - build_and_persist:
@@ -510,14 +510,28 @@ workflows:
           requires:
             - librem_14
 
-      # dasharo release
+      # dasharo release, share 24.02.01 utils/crossgcc
       - build:
-          name: nitropad-ns50
-          target: nitropad-ns50
+          name: UNTESTED_nitropad-ns50
+          target: UNTESTED_nitropad-ns50
           subcommand: ""
           requires:
-            - novacustom_nv4x_adl
+            - novacustom-nv4x_adl
 
+      - build:
+          name: novacustom-v560tu
+          target: novacustom-v560tu
+          subcommand: ""
+          requires:
+            - x230-hotp-maximized
+
+      - build:
+          name: novacustom-v540tu
+          target: novacustom-v540tu
+          subcommand: ""
+          requires:
+            - x230-hotp-maximized
+            
       # coreboot 4.11
       - build:
           name: UNMAINTAINED_kgpe-d16_workstation
@@ -533,7 +547,7 @@ workflows:
           subcommand: ""
           requires:
             - librem_l1um
-      
+
       # coreboot 4.11
       - build:
           name: UNMAINTAINED_kgpe-d16_server
