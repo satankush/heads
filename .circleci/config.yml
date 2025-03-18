@@ -16,7 +16,9 @@ commands:
             echo "Sourcing /devenv.sh since docker entrypoint doesn't do it as expected"
             source /devenv.sh
             rm -rf build/<< parameters.arch >>/<< parameters.target >>/* build/<< parameters.arch >>/log/*
-            #Force -j8 so that each make subtask consumes 1gb max and force respect of minimal requirements of CircleCI which otherwise randomly fails
+            #Pass AVAILABLE_MEM_GB=8 to respect CircleCI free tier RAM assignation, which otherwise randomly fails. See Makefile calculations.
+            # Without AVAILABLE_MEM_GB=8: CircleCI passes '-j36 --load-average=54'
+            # With AVAILABLE_MEM_GB=8: CircleCI passes '-j8 --load-average=12'
             make V=1 BOARD=<< parameters.target >> << parameters.subcommand >> AVAILABLE_MEM_GB=8  | ts || touch ./tmpDir/failed_build
           no_output_timeout: 3h
       - run:
@@ -398,43 +400,43 @@ workflows:
             - t480-hotp-maximized
 
       - build:
-          name: t530-maximized
-          target: t530-maximized
+          name: UNTESTED_t530-maximized
+          target: UNTESTED_t530-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
 
       - build:
-          name: t530-hotp-maximized
-          target: t530-hotp-maximized
+          name: UNTESTED_t530-hotp-maximized
+          target: UNTESTED_t530-hotp-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
 
       - build:
-          name: UNTESTED_t440p-maximized
-          target: UNTESTED_t440p-maximized
+          name: t440p-maximized
+          target: t440p-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
 
       - build:
-          name: UNTESTED_t440p-hotp-maximized
-          target: UNTESTED_t440p-hotp-maximized
+          name: t440p-hotp-maximized
+          target: t440p-hotp-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
 
       - build:
-          name: UNTESTED_w541-maximized
-          target: UNTESTED_w541-maximized
+          name: w541-maximized
+          target: w541-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
 
       - build:
-          name: UNTESTED_w541-hotp-maximized
-          target: UNTESTED_w541-hotp-maximized
+          name: w541-hotp-maximized
+          target: w541-hotp-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
@@ -447,15 +449,15 @@ workflows:
             - t480-hotp-maximized
 
       - build:
-          name: z220-cmt-maximized
-          target: z220-cmt-maximized
+          name: UNTESTED_z220-cmt-maximized
+          target: UNTESTED_z220-cmt-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
 
       - build:
-          name: z220-cmt-hotp-maximized
-          target: z220-cmt-hotp-maximized
+          name: UNTESTED_z220-cmt-hotp-maximized
+          target: UNTESTED_z220-cmt-hotp-maximized
           subcommand: ""
           requires:
             - t480-hotp-maximized
