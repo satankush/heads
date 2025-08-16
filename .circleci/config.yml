@@ -420,29 +420,49 @@ workflows:
             - EOL_t480-hotp-maximized
 
       - build:
+<<<<<<< HEAD
+          name: t440p-maximized
+          target: t440p-maximized
+=======
           name: EOL_UNTESTED_t440p-maximized
           target: EOL_UNTESTED_t440p-maximized
+>>>>>>> abacus_updlinux_hardening
           subcommand: ""
           requires:
             - EOL_t480-hotp-maximized
 
       - build:
+<<<<<<< HEAD
+          name: t440p-hotp-maximized
+          target: t440p-hotp-maximized
+=======
           name: EOL_UNTESTED_t440p-hotp-maximized
           target: EOL_UNTESTED_t440p-hotp-maximized
+>>>>>>> abacus_updlinux_hardening
           subcommand: ""
           requires:
             - EOL_t480-hotp-maximized
 
       - build:
+<<<<<<< HEAD
+          name: w541-maximized
+          target: w541-maximized
+=======
           name: EOL_UNTESTED_w541-maximized
           target: EOL_UNTESTED_w541-maximized
+>>>>>>> abacus_updlinux_hardening
           subcommand: ""
           requires:
             - EOL_t480-hotp-maximized
 
       - build:
+<<<<<<< HEAD
+          name: w541-hotp-maximized
+          target: w541-hotp-maximized
+=======
           name: EOL_UNTESTED_w541-hotp-maximized
           target: EOL_UNTESTED_w541-hotp-maximized
+>>>>>>> abacus_updlinux_hardening
           subcommand: ""
           requires:
             - EOL_t480-hotp-maximized
