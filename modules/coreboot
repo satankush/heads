@@ -86,7 +86,7 @@ coreboot-blobs-24.12_hash := e75a788fa4910d48c42e9997ff55f27aaa06dc2999bab9b6048
 $(eval $(call coreboot_module,24.12,))
 
 coreboot-25.06_hash := 53ec8b4d187196e812e23d27ec251aeb8d09e194ab737509ec664c8fb904d459
-coreboot-blobs-25.06 := dc2dc324607891366ccd8b42a5838a2caf17e48a2b0484abbedb5d2149d91bd0
+coreboot-blobs-25.06_hash := dc2dc324607891366ccd8b42a5838a2caf17e48a2b0484abbedb5d2149d91bd0
 $(eval $(call coreboot_module,25.06,))
 
 # coreboot git forks
